@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+.next/
+
+# Environment files
+.env
+.env.*
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# IDE files
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker volumes
+postgres-data/
+
+# Generated files
+*.generated.*
+
+# extra
+dev/
+notes.md
