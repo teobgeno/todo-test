@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import databaseConfig from './config/database.config';
 import { validationSchema } from './config/validation.schema';
+import { TodosModule } from './todos/todos.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { validationSchema } from './config/validation.schema';
         synchronize: false,
       }),
     }),
+    TodosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
