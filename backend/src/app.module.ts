@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import databaseConfig from './config/database.config';
 import { validationSchema } from './config/validation.schema';
+import { HealthController } from './health/health.controller';
 import { TodosModule } from './todos/todos.module';
 
 @Module({
@@ -32,7 +33,7 @@ import { TodosModule } from './todos/todos.module';
     }),
     TodosModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HealthController],
   providers: [AppService],
 })
 export class AppModule {}

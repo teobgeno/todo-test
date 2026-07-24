@@ -33,3 +33,4 @@ postgres-data/
 # Claude Code tooling (not part of the application)
 .claude/
 dev/
+-e ".env\n.mcp.json" 

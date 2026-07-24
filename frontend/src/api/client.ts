@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://54.166.173.26/:3000';
 const HTTP_STATUS_NO_CONTENT = 204;
 
 interface ApiErrorBody {
