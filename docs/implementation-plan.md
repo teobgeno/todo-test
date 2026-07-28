@@ -73,7 +73,7 @@ enterprise_learn/
 │   │   └── types/
 │   │       └── todo.ts
 │   ├── index.html
-│   ├── Dockerfile                        # multi-stage: deps / dev (vite) / build / runtime (nginx)
+│   ├── Dockerfile                        # deps / dev (vite) — no build/runtime stage; reverse proxy lives in root nginx/ instead
 │   ├── .env.example                      # VITE_API_URL
 │   ├── vite.config.ts
 │   ├── tsconfig.json
@@ -217,7 +217,7 @@ App.tsx
 Per-service **multi-stage Dockerfiles** using a build `target` to select dev vs. build/runtime (avoids maintaining separate `Dockerfile.dev`/`Dockerfile.prod`):
 
 - `backend/Dockerfile`: `deps` (npm ci) → `dev` (`nest start --watch`, source bind-mounted) → `build` (`npm run build`) → `runtime` (copies `dist` + prod `node_modules`, `CMD node dist/main.js`). Compose uses `target: dev`.
-- `frontend/Dockerfile`: `deps` → `dev` (`vite --host 0.0.0.0`, source bind-mounted, HMR works through the container) → `build` → `runtime` (`nginx:alpine` serving `dist/`). Compose uses `target: dev`; the `build`/`runtime` stages exist for completeness/learning value but aren't what Compose runs by default, since a *dev* environment is the actual ask.
+- `frontend/Dockerfile`: `deps` → `dev` (`vite --host 0.0.0.0`, source bind-mounted, HMR works through the container) only. An earlier `build`/`runtime` (`nginx:alpine` serving `dist/`) stage was dropped once a root-level `nginx` service was added to `docker-compose.yml` as the single reverse proxy for both `frontend` and `backend` — keeping a second, dormant nginx baked into the frontend image was redundant. The frontend now reaches the API via that proxy (`VITE_API_URL=/api`, relative) instead of a hardcoded backend URL.
 
 **`docker-compose.yml`** (single file — no prod compose variant, since deployment is out of scope):
 
