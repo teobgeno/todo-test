@@ -27,6 +27,9 @@ import { TodosModule } from './todos/todos.module';
         username: config.get<string>('database.username'),
         password: config.get<string>('database.password'),
         database: config.get<string>('database.name'),
+        ssl: config.get<boolean>('database.ssl')
+          ? { rejectUnauthorized: false }
+          : false,
         autoLoadEntities: true,
         synchronize: false,
       }),
