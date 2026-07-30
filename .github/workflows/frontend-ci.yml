@@ -40,14 +40,14 @@ jobs:
           role-to-assume: arn:aws:iam::958085379190:role/todoapp-github-actions-role
           aws-region: us-east-1
 
-      - name: Login to ECR
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build and push frontend image
+      - name: Sync build to S3
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          docker build -t 958085379190.dkr.ecr.us-east-1.amazonaws.com/todoapp/front-repo:${{ github.sha }} .
-          docker build -t 958085379190.dkr.ecr.us-east-1.amazonaws.com/todoapp/front-repo:latest .
-          docker push 958085379190.dkr.ecr.us-east-1.amazonaws.com/todoapp/front-repo:${{ github.sha }}
-          docker push 958085379190.dkr.ecr.us-east-1.amazonaws.com/todoapp/front-repo:latest
+          aws s3 sync ./dist s3://todo-test-frontend-958085379190-us-east-1-an --delete
+
+      - name: Invalidate CloudFront cache
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id E286F7R9A7HAZ9 \
+            --paths "/*"

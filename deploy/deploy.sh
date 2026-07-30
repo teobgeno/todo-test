@@ -7,7 +7,7 @@ echo "=== Logging in to ECR ==="
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 958085379190.dkr.ecr.us-east-1.amazonaws.com
 
 echo "=== Pulling latest images ==="
-docker compose -f docker-compose.prod.yml pull backend frontend
+docker compose -f docker-compose.prod.yml pull backend
 
 echo "=== Running database migrations ==="
 if ! docker compose -f docker-compose.prod.yml run --rm backend npm run migration:run:prod; then
@@ -16,7 +16,7 @@ if ! docker compose -f docker-compose.prod.yml run --rm backend npm run migratio
 fi
 
 echo "=== Restarting services with new images ==="
-docker compose -f docker-compose.prod.yml up -d backend frontend nginx
+docker compose -f docker-compose.prod.yml up -d backend nginx
 
 echo "=== Waiting for backend to become healthy ==="
 sleep 5
